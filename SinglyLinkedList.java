@@ -1,18 +1,45 @@
-import java.util.AbstractSequentialList;
-import java.util.Comparator;
-import java.util.ListIterator;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public class SinglyLinkedList extends AbstractSequentialList {
+public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
+
+    private int size = 0;
+
+    public SinglyLinkedList() {
+    }
+
+    public SinglyLinkedList(Collection collection) {
+        this.addAll(collection);
+    }
+
+    /**
+     * Write the method boolean add(E elem) in which you add an element to the
+     * end of a list; the method will always return true. Note that we would
+     * inherit a fully functioning add method from the superclass (as long as we
+     * implement listIterator), but this method is inefficient. Your
+     * implementation should instead operate in O(1) time.
+     */
+
+    public boolean add (E newItem) {
+
+    }
+
+    /**
+     * Write the method ListIterator<E> listIterator(int pos), for details see
+     * the description in AbstractSequentialList. This method will typically
+     * just create s suitable object and return it.
+     *
+     * @param pos
+     */
 
     @Override
-    public ListIterator listIterator(final int i) {
+    public ListIterator listIterator(final int pos) {
         return null;
     }
+
 
     @Override
     public void forEach(final Consumer action) {
@@ -34,9 +61,18 @@ public class SinglyLinkedList extends AbstractSequentialList {
         return null;
     }
 
+    /**
+     * Write a int size() method that returns the size of the collection. The
+     * method should just lookup a field - marks for this question will indicate
+     * the extend to which you have maintained that field correctly in other
+     * parts of the implementation.
+     *
+     * @return
+     */
+
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
