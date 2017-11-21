@@ -1,4 +1,8 @@
-import java.util.*;
+import java.util.AbstractSequentialList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.ListIterator;
+import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -54,6 +58,8 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     public boolean add(E newItem) {
         Node<E> newNode = new Node<>(newItem, null);
 
+        // (head == null) -> (tail == null)
+        // so calling setRight() on it would cause an Exception
         if (head == null) head = tail = newNode;
 
         else {
@@ -187,32 +193,32 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     private void sort(int low, int high) {
-        int i = low, j = high;
+        int l = low, h = high;
         int pivot = low + (high - low);
 
         // Divide into two lists
-        while (i <= j) {
+        while (l <= h) {
 
             /* If the current value from the left list is smaller than the pivot
             element then get the next element from the left list */
-            while (numbers[i] < pivot) i++;
+            while (numbers[l] < pivot) l++;
 
             /* If the current value from the right list is larger than the pivot
             element then get the next element from the right list */
-            while (numbers[j] > pivot) j--;
+            while (numbers[h] > pivot) h--;
 
             /* If we have found a value in the left list which is larger than
             the pivot element and if we have found a value in the right list
             which is smaller than the pivot element then we exchange the
             values.
             As we are done we can increase i and j */
-            if (i <= j) {
-                exchange(i, j);
-                i++;
-                j--;
+            if (l <= h) {
+                exchange(l, h);
+                l++;
+                h--;
             }
         }
-        if (low < j) sort(low, j);
-        if (i < high) sort(i, high);
+        if (low < h) sort(low, h);
+        if (l < high) sort(l, high);
     }
 }
