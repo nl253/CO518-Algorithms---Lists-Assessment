@@ -1,8 +1,4 @@
-import java.util.AbstractSequentialList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.ListIterator;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -188,37 +184,17 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     @Override
     public void sort(final Comparator comparator) {
-        if ((head == null) || (head.equals(tail))) return;
-        sort(0, size - 1);
-    }
 
-    private void sort(int low, int high) {
-        int l = low, h = high;
-        int pivot = low + (high - low);
+        SinglyLinkedList<E> tmpList = (SinglyLinkedList<E>) stream().sorted(comparator)
+                .collect(SinglyLinkedList::new, (x, y) -> add((E) y), (Object x, Object y) -> addAll((Collection<? extends E>) Stream
+                        .of(x, y)));
 
-        // Divide into two lists
-        while (l <= h) {
+        // reset
+        head = null;
+        tail = null;
+        size = 0;
 
-            /* If the current value from the left list is smaller than the pivot
-            element then get the next element from the left list */
-            while (numbers[l] < pivot) l++;
-
-            /* If the current value from the right list is larger than the pivot
-            element then get the next element from the right list */
-            while (numbers[h] > pivot) h--;
-
-            /* If we have found a value in the left list which is larger than
-            the pivot element and if we have found a value in the right list
-            which is smaller than the pivot element then we exchange the
-            values.
-            As we are done we can increase i and j */
-            if (l <= h) {
-                exchange(l, h);
-                l++;
-                h--;
-            }
-        }
-        if (low < h) sort(low, h);
-        if (l < high) sort(l, high);
+        // add all
+        tmpList.forEach(x -> add((E) x));
     }
 }
