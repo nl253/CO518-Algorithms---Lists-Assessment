@@ -1,4 +1,3 @@
-
 /**
  * general purpose pairs of objects
  *
@@ -7,8 +6,10 @@
  */
 
 public class Pair<A, B> {
-    /** fields are left non-private to allow for efficient
-     ** manipulation of pair objects
+
+    /**
+     * fields are left non-private to allow for efficient * manipulation of pair
+     * objects
      */
     protected A left;
     protected B right;
@@ -22,21 +23,25 @@ public class Pair<A, B> {
     }
 
     // selectors and mutators
-    public A getLeft()  {
+    public A getLeft() {
         return left;
     }
+
     public B getRight() {
         return right;
     }
+
     public void setLeft(A newLeft) {
         left = newLeft;
     }
+
     public void setRight(B newRight) {
         right = newRight;
     }
 
-    /** if pairs are used as 'ordinary' pairs this is fine,
-     *  but often we should use a more bespoke String representation
+    /**
+     * if pairs are used as 'ordinary' pairs this is fine, but often we should
+     * use a more bespoke String representation
      */
     public String toString() {
         return "(" + left + "," + right + ")";

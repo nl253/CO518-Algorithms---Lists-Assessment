@@ -1,4 +1,3 @@
-
 /**
  * linked data structure, special case of Pair
  *
@@ -22,7 +21,7 @@ public class Node<A> extends Pair<A, Node<A>> {
         // return left + "," + right.rawString();
         StringBuilder sb = new StringBuilder(left.toString());
 
-        for (Node<A>i = right; i != null; i = i.getRight()) {
+        for (Node<A> i = right; i != null; i = i.getRight()) {
             sb.append(',');
             sb.append(i.left.toString());
         }
