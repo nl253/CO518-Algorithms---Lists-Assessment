@@ -5,6 +5,7 @@
  * @author Stefan Kahrs
  * @version 21/09/2017
  */
+
 public class Pair<A, B> {
     /** fields are left non-private to allow for efficient
      ** manipulation of pair objects
