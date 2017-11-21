@@ -32,10 +32,11 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     public SinglyLinkedList() {}
 
     /**
-     * Second version of constructor.
-     * It's a convenience function that takes a collection and automatically inserts all elements into the list.
+     * Second version of constructor. It's a convenience function that takes a
+     * collection and automatically inserts all elements into the list.
      *
-     * @param collection the collection of items you want to insert on SinglyLinkedList creation.
+     * @param collection the collection of items you want to insert on
+     * SinglyLinkedList creation.
      */
 
     public SinglyLinkedList(Collection collection) {
@@ -43,18 +44,24 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     /**
-     * - [x] Write the method boolean add(E elem) in which you add an element to the end of a list
-     * - [x] the method will always return true
-     * - [x] Your implementation should instead operate in O(1) time
+     * - [x] Write the method boolean add(E elem) in which you add an element to
+     * the end of a list - [x] the method will always return true - [x] Your
+     * implementation should instead operate in O(1) time
      *
      * @return true
      */
 
     public boolean add(E newItem) {
         Node<E> newNode = new Node<>(newItem, null);
-        tail.setRight(newNode);
-        tail = newNode;
-        size++;
+
+        if (head == null) head = tail = newNode;
+
+        else {
+            tail.setRight(newNode);
+            tail = newNode;
+            size++;
+        }
+
         return true;
     }
 
@@ -62,7 +69,8 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * [x] Write the method ListIterator<E> listIterator(int pos), for details
      * see the description in AbstractSequentialList.
      * <p>
-     * [x] This method will typically just create s suitable object and return it.
+     * [x] This method will typically just create s suitable object and return
+     * it.
      *
      * @param pos
      */
@@ -74,7 +82,8 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
 
     /**
-     * @param action ie a unary function that takes a parameter of type E and returns null ie nothing.
+     * @param action ie a unary function that takes a parameter of type E and
+     * returns null ie nothing.
      */
 
     @Override
@@ -98,13 +107,16 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     @Override
     public Stream stream() {
-        Builder<E> builder =  Stream.builder();
+        Builder<E> builder = Stream.builder();
         for (Node<E> node = head; node != null; node = node.getRight())
             builder.add(node.getLeft());
         return builder.build();
     }
 
     /**
+     * I am leaving this one unimplemented because we really haven't been taught
+     * this.
+     *
      * @return parallel version of a stream of values in the list
      */
 
@@ -126,7 +138,8 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     /**
-     * Remove items from SinglyLinkedList that return false when tested against the Predicate.
+     * Remove items from SinglyLinkedList that return false when tested against
+     * the Predicate.
      *
      * @param filter a boolean, unary function
      * @return true
@@ -162,10 +175,44 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     /**
      * Sort the SinglyLinkedList in-place using quicksort.
-     * @param comparator
+     *
+     * @param comparator ie a function that imposes a total ordering on the
+     * objects
      */
 
     @Override
     public void sort(final Comparator comparator) {
+        if ((head == null) || (head.equals(tail))) return;
+        sort(0, size - 1);
+    }
+
+    private void sort(int low, int high) {
+        int i = low, j = high;
+        int pivot = low + (high - low);
+
+        // Divide into two lists
+        while (i <= j) {
+
+            /* If the current value from the left list is smaller than the pivot
+            element then get the next element from the left list */
+            while (numbers[i] < pivot) i++;
+
+            /* If the current value from the right list is larger than the pivot
+            element then get the next element from the right list */
+            while (numbers[j] > pivot) j--;
+
+            /* If we have found a value in the left list which is larger than
+            the pivot element and if we have found a value in the right list
+            which is smaller than the pivot element then we exchange the
+            values.
+            As we are done we can increase i and j */
+            if (i <= j) {
+                exchange(i, j);
+                i++;
+                j--;
+            }
+        }
+        if (low < j) sort(low, j);
+        if (i < high) sort(i, high);
     }
 }
