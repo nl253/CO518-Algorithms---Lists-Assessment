@@ -93,7 +93,7 @@ public class SinglyListIterator<E> implements ListIterator<E> {
     }
 
     /**
-     * Add an element to the list.
+     * Adds an element to the list.
      *
      * @param e new element of type E that you want to append to the SinglyLinkedList
      */
