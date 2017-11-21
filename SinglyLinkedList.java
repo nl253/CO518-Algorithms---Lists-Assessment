@@ -17,13 +17,13 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * reference to the first element
      */
 
-    private Node head;
+    private Node<E> head;
 
     /**
      * reference to the last element
      */
 
-    private Node tail;
+    private Node<E> tail;
 
     /**
      * Empty constructor. Produces an empty SinglyLinkedList.
