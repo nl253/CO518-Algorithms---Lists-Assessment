@@ -183,11 +183,13 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      */
 
     @Override
-    public void sort(final Comparator comparator) {
+    public void sort(final Comparator<? super E> comparator) {
 
-        SinglyLinkedList<E> tmpList = (SinglyLinkedList<E>) stream().sorted(comparator)
-                .collect(SinglyLinkedList::new, (x, y) -> add((E) y), (Object x, Object y) -> addAll((Collection<? extends E>) Stream
-                        .of(x, y)));
+        if (head == null || head.equals(tail)) return;
+
+        SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
+
+        stream().sorted(comparator).forEach(x -> { tmpList.add((E) x);});
 
         // reset
         head = null;
