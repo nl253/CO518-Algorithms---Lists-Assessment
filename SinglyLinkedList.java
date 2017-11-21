@@ -185,6 +185,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     @Override
     public void sort(final Comparator<? super E> comparator) {
 
+        // size is 0 or 1
         if (head == null || head.equals(tail)) return;
 
         SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
