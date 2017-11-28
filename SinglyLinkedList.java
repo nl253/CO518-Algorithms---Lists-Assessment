@@ -2,7 +2,6 @@ import java.util.AbstractSequentialList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.ListIterator;
-import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -73,7 +72,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     /**
-     * [x] Write the method ListIterator<E> listIterator(int pos), for details
+     * [x] Write the method ListIterator listIterator(int pos), for details
      * see the description in AbstractSequentialList.
      * <p>
      * [x] This method will typically just create s suitable object and return
@@ -101,18 +100,6 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     public void forEach(final Consumer consumer) {
         for (Node<E> node = head; node != null; node = node.getRight())
             consumer.accept(node.getLeft());
-    }
-
-    /**
-     * TODO
-     * @return null
-     */
-
-    @SuppressWarnings("ReturnOfNull")
-    @Override
-    public Spliterator<E> spliterator() {
-        // Spliterators.spliterator(listIterator(0));
-        return null;
     }
 
     /**
