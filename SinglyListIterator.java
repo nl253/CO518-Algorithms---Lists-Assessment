@@ -1,6 +1,8 @@
 import java.util.List;
 import java.util.ListIterator;
+import java.util.function.Consumer;
 
+@SuppressWarnings("DesignForExtension")
 public class SinglyListIterator<E> implements ListIterator<E> {
 
     /**
@@ -21,35 +23,40 @@ public class SinglyListIterator<E> implements ListIterator<E> {
     }
 
     /**
-     * Returns true if there is another element in the SinglyLinkedList that can
-     * be produced using next() ie if advancing the pointer and looking up would
-     * not produce null.
+     * Returns true if this list iterator has more elements when traversing the
+     * list in the forward direction.
      *
      * @return boolean
      */
 
     @Override
     public boolean hasNext() {
-        return list.get(nextIndex()) != null;
+        return nextIndex() < list.size();
     }
 
     /**
-     * Produces the next element from the SinglyLinkedList.
+     * Returns the next element in the list and advances the cursor position.
      *
      * @return the next element from the list
      */
 
     @Override
     public E next() {
+        E item = list.get(position);
         position++;
-        return list.get(position);
+        return item;
     }
 
+    @SuppressWarnings("MethodCallInLoopCondition")
+    @Override
+    public void forEachRemaining(final Consumer<? super E> consumer) {
+        for (int i = position; i < list.size(); i++)
+            consumer.accept(list.get(i));
+    }
 
     /**
-     * Returns a boolean that tells you if there is a previous item. If the
-     * current position is 0 then there is no previous items and false is
-     * returned, otherwise true is returned.
+     * Returns true if this list iterator has more elements when traversing the
+     * list in the reverse direction.
      *
      * @return boolean
      */
@@ -60,18 +67,21 @@ public class SinglyListIterator<E> implements ListIterator<E> {
     }
 
     /**
-     * Produces the previous item.
+     * Returns the previous element in the list and moves the cursor position
+     * backwards.
      *
      * @return the previous item
      */
 
     @Override
     public E previous() {
+        position--;
         return list.get(previousIndex());
     }
 
     /**
-     * Returns the current index + 1 ie the next index.
+     * Returns the index of the element that would be returned by a subsequent
+     * call to next().
      *
      * @return the next index
      */
@@ -82,7 +92,8 @@ public class SinglyListIterator<E> implements ListIterator<E> {
     }
 
     /**
-     * Returns the current index - 1 ie the previous index.
+     * Returns the index of the element that would be returned by a subsequent
+     * call to previous().
      *
      * @return the previous index
      */
@@ -93,9 +104,10 @@ public class SinglyListIterator<E> implements ListIterator<E> {
     }
 
     /**
-     * Adds an element to the list.
+     * Inserts the specified element into the list (optional operation).
      *
-     * @param e new element of type E that you want to append to the SinglyLinkedList
+     * @param e new element of type E that you want to append to the
+     * SinglyLinkedList
      */
 
     @Override

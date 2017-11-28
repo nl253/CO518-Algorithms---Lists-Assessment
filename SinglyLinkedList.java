@@ -3,12 +3,14 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
+@SuppressWarnings({"InstanceVariableNamingConvention", "InstanceVariableOfConcreteClass", "ImplicitCallToSuper", "PublicConstructor", "LocalVariableOfConcreteClass", "DesignForExtension", "NestedAssignment"})
 public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     /**
@@ -43,7 +45,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * SinglyLinkedList creation.
      */
 
-    public SinglyLinkedList(Collection collection) {
+    public SinglyLinkedList(final Collection<E> collection) {
         addAll(collection);
     }
 
@@ -55,8 +57,8 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * @return true
      */
 
-    public boolean add(E newItem) {
-        Node<E> newNode = new Node<>(newItem, null);
+    public boolean add(final E e) {
+        Node<E> newNode = new Node<>(e, null);
 
         // (head == null) -> (tail == null)
         // so calling setRight() on it would cause an Exception
@@ -78,36 +80,45 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * [x] This method will typically just create s suitable object and return
      * it.
      *
-     * @param pos
+     * @param i
      */
 
     @Override
-    public ListIterator listIterator(final int pos) {
-        return new SinglyListIterator(this);
+    public ListIterator<E> listIterator(final int i) {
+        return new SinglyListIterator<>(this);
     }
 
 
     /**
-     * @param action ie a unary function that takes a parameter of type E and
+     * Execute a void (non-returning) function (a consumer) on each element in
+     * this SinglyLinkedList.
+     *
+     * @param consumer ie a unary function that takes a parameter of type E and
      * returns null ie nothing.
      */
 
+    @SuppressWarnings("LawOfDemeter")
     @Override
-    public void forEach(final Consumer action) {
+    public void forEach(final Consumer consumer) {
         for (Node<E> node = head; node != null; node = node.getRight())
-            action.accept(node.getLeft());
+            consumer.accept(node.getLeft());
     }
 
     /**
      * @return null
      */
 
+    @SuppressWarnings("ReturnOfNull")
     @Override
     public Spliterator spliterator() {
+        Spliterators.spliterator(listIterator(0));
         return null;
     }
 
     /**
+     * Creates a stream builder and populates the stream with elements of this
+     * SinglyLinkedList (NOT nodes but elements).
+     *
      * @return stream of values stored in the list
      */
 
@@ -132,8 +143,11 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     /**
-     * - [x] Write a int size() method that returns the size of the collection.
-     * - [x] The method should just lookup a field (see field int size above)
+     * The number of elements in the list. Looks up the size field which gives
+     * O(1) time complexity .
+     * <p>
+     * - [x] Write a int size() method that returns the size of the collection -
+     * [x] The method should just lookup a field (see field int size above)
      *
      * @return the number of elements in the list
      */
@@ -147,17 +161,18 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * Remove items from SinglyLinkedList that return false when tested against
      * the Predicate.
      *
-     * @param filter a boolean, unary function
+     * @param predicate a boolean, unary function
      * @return true
      */
 
+    @SuppressWarnings({"LawOfDemeter", "FeatureEnvy"})
     @Override
-    public boolean removeIf(final Predicate filter) {
+    public boolean removeIf(final Predicate predicate) {
 
-        SinglyLinkedList tmpList = new SinglyLinkedList();
+        SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
 
         for (Node<E> node = head; node != null; node = node.getRight())
-            if (true) tmpList.add(node.getLeft());
+            if (predicate.test(node.getLeft())) tmpList.add(node.getLeft());
 
         // because I cannot just assign to this eg this = tmpList
         head = tmpList.head;
@@ -170,13 +185,15 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     /**
      * Modify the SinglyLinkedList by applying the operator to all elements.
      *
-     * @param operator ie a unary function that produces an element of type E.
+     * @param unaryOperator ie a unary function that produces an element of type
+     * E.
      */
 
+    @SuppressWarnings({"LawOfDemeter", "FeatureEnvy"})
     @Override
-    public void replaceAll(final UnaryOperator operator) {
+    public void replaceAll(final UnaryOperator<E> unaryOperator) {
         for (Node<E> node = head; node != null; node = node.getRight())
-            node.setLeft((E) operator.apply(node.getLeft()));
+            node.setLeft(unaryOperator.apply(node.getLeft()));
     }
 
     /**
@@ -190,7 +207,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     public void sort(final Comparator<? super E> comparator) {
 
         // size is 0 or 1
-        if (head == null || head.equals(tail)) return;
+        if ((head == null) || head.equals(tail)) return;
 
         SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
 
