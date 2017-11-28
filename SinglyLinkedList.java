@@ -3,14 +3,13 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-@SuppressWarnings({"InstanceVariableNamingConvention", "InstanceVariableOfConcreteClass", "ImplicitCallToSuper", "PublicConstructor", "LocalVariableOfConcreteClass", "DesignForExtension", "NestedAssignment"})
+@SuppressWarnings({"InstanceVariableNamingConvention", "InstanceVariableOfConcreteClass", "ImplicitCallToSuper", "PublicConstructor", "LocalVariableOfConcreteClass", "DesignForExtension", "NestedAssignment", "ClassWithoutLogger", "ClassHasNoToStringMethod"})
 public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     /**
@@ -105,13 +104,14 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     /**
+     * TODO
      * @return null
      */
 
     @SuppressWarnings("ReturnOfNull")
     @Override
-    public Spliterator spliterator() {
-        Spliterators.spliterator(listIterator(0));
+    public Spliterator<E> spliterator() {
+        // Spliterators.spliterator(listIterator(0));
         return null;
     }
 
@@ -122,8 +122,9 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * @return stream of values stored in the list
      */
 
+    @SuppressWarnings("LawOfDemeter")
     @Override
-    public Stream stream() {
+    public Stream<E> stream() {
         Builder<E> builder = Stream.builder();
         for (Node<E> node = head; node != null; node = node.getRight())
             builder.add(node.getLeft());
@@ -138,7 +139,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      */
 
     @Override
-    public Stream parallelStream() {
+    public Stream<E> parallelStream() {
         return null;
     }
 
@@ -167,18 +168,19 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     @SuppressWarnings({"LawOfDemeter", "FeatureEnvy"})
     @Override
-    public boolean removeIf(final Predicate predicate) {
+    public boolean removeIf(final Predicate<? super E> predicate) {
 
         SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
 
         for (Node<E> node = head; node != null; node = node.getRight())
+            // test on the value stored in each node not the node itself
             if (predicate.test(node.getLeft())) tmpList.add(node.getLeft());
 
+        // make this SinglyLinkedList the tmpList
         // because I cannot just assign to this eg this = tmpList
         head = tmpList.head;
         tail = tmpList.tail;
         size = tmpList.size;
-
         return true;
     }
 
@@ -211,7 +213,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
         SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
 
-        stream().sorted(comparator).forEach(x -> { tmpList.add((E) x);});
+        stream().sorted(comparator).forEach(tmpList::add);
 
         // reset
         head = null;
