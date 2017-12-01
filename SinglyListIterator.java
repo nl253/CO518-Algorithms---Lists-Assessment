@@ -1,25 +1,40 @@
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
-@SuppressWarnings("DesignForExtension")
+/**
+ * @param <E>
+ * @author nl253
+ */
+
+@SuppressWarnings({"DesignForExtension", "ClassHasNoToStringMethod", "AbstractClassNeverImplemented", "ClassWithoutLogger", "InstanceVariableMayNotBeInitialized"})
 public class SinglyListIterator<E> implements ListIterator<E> {
 
     /**
      * keeps track of the current position
      */
 
+    @SuppressWarnings("InstanceVariableNamingConvention")
     private int position;
 
     /**
      * a reference to the SinglyLinkedList this ListIterator is iterating over
      */
 
+    @SuppressWarnings({"FieldMayBeFinal", "InstanceVariableNamingConvention"})
     private List<E> list;
 
 
-    public SinglyListIterator(List<E> list) {
+    @SuppressWarnings({"AssignmentToCollectionOrArrayFieldFromParameter", "ParameterHidesMemberVariable", "ImplicitCallToSuper", "ConstructorNotProtectedInAbstractClass", "PublicConstructor"})
+    public SinglyListIterator(final List<E> list) {
         this.list = list;
+    }
+
+    @SuppressWarnings({"AssignmentToCollectionOrArrayFieldFromParameter", "ParameterHidesMemberVariable", "ImplicitCallToSuper", "ConstructorNotProtectedInAbstractClass", "PublicConstructor"})
+    public SinglyListIterator(final List<E> list, final int position) {
+        this.list = list;
+        this.position = position;
     }
 
     /**
@@ -38,13 +53,19 @@ public class SinglyListIterator<E> implements ListIterator<E> {
      * Returns the next element in the list and advances the cursor position.
      *
      * @return the next element from the list
+     *
+     * @throws NoSuchElementException when you ask for an item when the iterator
+     * has no next items
      */
 
+    @SuppressWarnings("NewExceptionWithoutArguments")
     @Override
     public E next() {
-        E item = list.get(position);
-        position++;
-        return item;
+        if (hasNext()) {
+            final E item = list.get(position);
+            position++;
+            return item;
+        } else throw new NoSuchElementException();
     }
 
     @SuppressWarnings("MethodCallInLoopCondition")
@@ -103,6 +124,7 @@ public class SinglyListIterator<E> implements ListIterator<E> {
         return position - 1;
     }
 
+
     /**
      * Inserts the specified element into the list (optional operation).
      *
@@ -114,4 +136,11 @@ public class SinglyListIterator<E> implements ListIterator<E> {
     public void add(final E e) {
         list.add(e);
     }
+
+    // We were told not to implement these
+    // @Override
+    // public void remove() {}
+    //
+    // @Override
+    // public void set(final E e) {}
 }

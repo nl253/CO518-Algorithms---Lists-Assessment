@@ -11,13 +11,13 @@ The above picture shows how we will be representing our linked lists, here the l
 The boxes with the sharp corners stand for objects of class `Node<Integer>`.
 
 The Node class is already provided and **need not (and should not) be modified**.
+
 The box with the rounded corners would be an object of our new
 `SinglyLinkedList` class, which is yet to be written.
 This has fields pointing to both the first and last Node cell of the
 linked list (if the list is empty these references should be both null),
 and possibly further fields.
 
----------------------------------------------------------------------
 
 * Write the generic class `SinglyLinkedList<E>`. This should extend `AbstractSequentialList` (from java.util).
    - We want two constructors for the class;

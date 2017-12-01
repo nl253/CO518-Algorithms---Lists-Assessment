@@ -8,31 +8,40 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-@SuppressWarnings({"InstanceVariableNamingConvention", "InstanceVariableOfConcreteClass", "ImplicitCallToSuper", "PublicConstructor", "LocalVariableOfConcreteClass", "DesignForExtension", "NestedAssignment", "ClassWithoutLogger", "ClassHasNoToStringMethod"})
+/**
+ * @param <E>
+ * @author nl253
+ */
+
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutLogger", "DesignForExtension", "AccessingNonPublicFieldOfAnotherObject"})
 public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     /**
      * keeps track of the number of elements in the list
      */
 
+    @SuppressWarnings({"InstanceVariableMayNotBeInitialized", "InstanceVariableNamingConvention"})
     private int size;
 
     /**
      * reference to the first element
      */
 
+    @SuppressWarnings({"InstanceVariableOfConcreteClass", "InstanceVariableMayNotBeInitialized", "InstanceVariableNamingConvention"})
     private Node<E> head;
 
     /**
      * reference to the last element
      */
 
+    @SuppressWarnings({"InstanceVariableMayNotBeInitialized", "InstanceVariableOfConcreteClass", "InstanceVariableNamingConvention"})
     private Node<E> tail;
 
     /**
      * Empty constructor. Produces an empty SinglyLinkedList.
      */
 
+    @SuppressWarnings({"ImplicitCallToSuper", "PublicConstructor"})
     public SinglyLinkedList() {}
 
     /**
@@ -43,6 +52,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * SinglyLinkedList creation.
      */
 
+    @SuppressWarnings({"ImplicitCallToSuper", "PublicConstructor"})
     public SinglyLinkedList(final Collection<E> collection) {
         addAll(collection);
     }
@@ -55,8 +65,10 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * @return true
      */
 
+    @SuppressWarnings({"LocalVariableOfConcreteClass", "NestedAssignment", "ConstantConditions"})
+    @Override
     public boolean add(final E e) {
-        Node<E> newNode = new Node<>(e, null);
+        final Node<E> newNode = new Node<>(e, null);
 
         // (head == null) -> (tail == null)
         // so calling setRight() on it would cause an Exception
@@ -72,8 +84,8 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
     }
 
     /**
-     * [x] Write the method ListIterator listIterator(int pos), for details
-     * see the description in AbstractSequentialList.
+     * [x] Write the method ListIterator listIterator(int pos), for details see
+     * the description in AbstractSequentialList.
      * <p>
      * [x] This method will typically just create s suitable object and return
      * it.
@@ -83,6 +95,10 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
 
     @Override
     public ListIterator<E> listIterator(final int i) {
+        return new SinglyListIterator<>(this, i);
+    }
+
+    public ListIterator<E> listIterator() {
         return new SinglyListIterator<>(this);
     }
 
@@ -95,7 +111,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * returns null ie nothing.
      */
 
-    @SuppressWarnings("LawOfDemeter")
+    @SuppressWarnings({"LawOfDemeter", "unchecked", "LocalVariableOfConcreteClass", "rawtypes"})
     @Override
     public void forEach(final Consumer consumer) {
         for (Node<E> node = head; node != null; node = node.getRight())
@@ -109,10 +125,10 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * @return stream of values stored in the list
      */
 
-    @SuppressWarnings("LawOfDemeter")
+    @SuppressWarnings({"LawOfDemeter", "LocalVariableOfConcreteClass"})
     @Override
     public Stream<E> stream() {
-        Builder<E> builder = Stream.builder();
+        final Builder<E> builder = Stream.builder();
         for (Node<E> node = head; node != null; node = node.getRight())
             builder.add(node.getLeft());
         return builder.build();
@@ -125,6 +141,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * @return parallel version of a stream of values in the list
      */
 
+    @SuppressWarnings("ReturnOfNull")
     @Override
     public Stream<E> parallelStream() {
         return null;
@@ -153,11 +170,11 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * @return true
      */
 
-    @SuppressWarnings({"LawOfDemeter", "FeatureEnvy"})
+    @SuppressWarnings({"LawOfDemeter", "FeatureEnvy", "LocalVariableOfConcreteClass"})
     @Override
     public boolean removeIf(final Predicate<? super E> predicate) {
 
-        SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
+        final SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
 
         for (Node<E> node = head; node != null; node = node.getRight())
             // test on the value stored in each node not the node itself
@@ -178,7 +195,7 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * E.
      */
 
-    @SuppressWarnings({"LawOfDemeter", "FeatureEnvy"})
+    @SuppressWarnings({"LawOfDemeter", "FeatureEnvy", "LocalVariableOfConcreteClass"})
     @Override
     public void replaceAll(final UnaryOperator<E> unaryOperator) {
         for (Node<E> node = head; node != null; node = node.getRight())
@@ -192,22 +209,20 @@ public class SinglyLinkedList<E> extends AbstractSequentialList<E> {
      * objects
      */
 
+    @SuppressWarnings({"LocalVariableOfConcreteClass", "MethodWithMultipleReturnPoints", "MismatchedQueryAndUpdateOfCollection"})
     @Override
     public void sort(final Comparator<? super E> comparator) {
 
-        // size is 0 or 1
+        // size is 0 or 1 - nothing to do
         if ((head == null) || head.equals(tail)) return;
 
-        SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
+        final SinglyLinkedList<E> tmpList = new SinglyLinkedList<>();
 
         stream().sorted(comparator).forEach(tmpList::add);
 
-        // reset
-        head = null;
-        tail = null;
-        size = 0;
-
-        // add all
-        tmpList.forEach(x -> add((E) x));
+        // make this SinglyLinkedList the same as tmpList
+        size = tmpList.size;
+        head = tmpList.head;
+        tail = tmpList.tail;
     }
 }
